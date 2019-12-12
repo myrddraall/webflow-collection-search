@@ -43,7 +43,16 @@ gulp.task('build-prod-es2015', () => {
 
 });
 
-gulp.task('build-prod', gulp.parallel('build-prod-es5', 'build-prod-es2015'));
+gulp.task('copy-to-docks', () => {
+    return gulp.src([
+        `**/*`
+    ], {
+        cwd: `./dist/${PROJECT}/`
+    })
+    .pipe(gulp.dest(`./docs`));
+});
+
+gulp.task('build-prod', gulp.series(gulp.parallel('build-prod-es5', 'build-prod-es2015'), 'copy-to-docks'));
 
 /*
 
