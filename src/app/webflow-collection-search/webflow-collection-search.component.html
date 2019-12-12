@@ -1,0 +1,109 @@
+<ng-content></ng-content>
+<ng-container *ngIf="items | categorizeByAlpha:'data.' + sortField:useFullField; let catagories">
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <input #search matInput (change)="setFilter('text', search.value)" (keyup)="setFilter('text', search.value)"
+        [value]="isFilter('text') ? this.currentFilter.value : ''" />
+      <button mat-raised-button matSuffix color="primary">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="category-filters">
+      <mat-form-field appearance="outline" class="small-select sort">
+        <mat-label>Sort By</mat-label>
+        <mat-select [(ngModel)]="currentSortIndex" (selectionChange)="setFilter('none', undefined)">
+          <mat-option *ngFor="let sort of sorts; let i = index" [value]="i">
+            {{sort.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="small-select filter" *ngIf="useFullField">
+        <mat-label>Select {{currentSort.label}}</mat-label>
+        <mat-select (selectionChange)="setFilter('category', $event.value)"
+          [value]="isFilter('category') ? this.currentFilter.value : undefined">
+          <mat-option *ngFor="let cat of catagories; let i = index" [value]="cat.label">
+            {{cat.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="!useFullField" class="alpha-filter filter">
+        <mat-button-toggle color="primary" *ngFor="let cat of catagories; let i = index"
+          (click)="setFilter('alpha', cat.label)" [checked]="isFilter('alpha', cat.label)">{{cat.label}}
+        </mat-button-toggle>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<div #itemContainer class="w-dyn-items">
+  <ng-container
+    *ngIf="(items | categorizeByAlpha:'data.' + sortField:useFullField | filterFn:filterCategories(this.currentFilter.type, this.currentFilter.value)); let catagories">
+    <ng-container *ngIf="catagories?.length; else NoResults">
+      <ng-container *ngFor="let cat of catagories">
+        <div class="w-dyn-item category-header" *ngIf="showGroupHeaders">
+          {{cat.label}}
+        </div>
+        <div class="w-dyn-item"
+          *ngFor="let item of cat.items | filterFn:filterItems(this.currentFilter.type, this.currentFilter.value) | naturalSort:'data.' + sortField"
+          [innerHtml]="item.html">
+
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+</div>
+
+<ng-template #NoResults>
+  <div class="no-results-container">
+    <ng-container *ngIf="isFilterEmpty; else NoResultFound">
+      <ng-content select="[nosearch]"></ng-content>
+      <div>Start Searching</div>
+    </ng-container>
+    <ng-template #NoResultFound>
+      <ng-content select="[noresults]"></ng-content>
+      <div>No results match your criteria.</div>
+    </ng-template>
+  </div>
+</ng-template>
+
+<!-- 
+  <div
+    *ngFor="let cat of items | categorizeByAlpha:'data.' + sortField:useFullField | filterFn:filterCategories(this.currentFilter.type, this.currentFilter.value)">
+    <div class="w-dyn-item category-header" *ngIf="showGroupHeaders">
+      {{cat.label}}
+    </div>
+    <div class="w-dyn-item"
+      *ngFor="let item of cat.items | filterFn:filterItems(this.currentFilter.type, this.currentFilter.value) | naturalSort:'data.' + sortField" [innerHtml]="item.html">
+  
+    </div>
+
+
+
+    <div class="w-dyn-item" [outerHTML]="item.html"></div>
+
+    <div class="w-dyn-item">
+      -<div>
+        <h1>Eaque Omnis Totam</h1>
+        <p>Ad ab est maiores quia expedita rerum qui. Inventore et assumenda repellat sit natus quod tempora tempore
+          sapiente. Laudantium ut distinct</p>
+        </div>
+      </div>
+    -->
+
+<!-- 
+
+    <div>
+      
+      <div *ngFor="let cat of items | categorizeByAlpha:'data.' + sortField:useFullField | filterFn:filterCategories(this.currentFilter.type, this.currentFilter.value)">
+        <div class="w-dyn-item category-header" *ngIf="showGroupHeaders">
+          {{cat.label}}
+        </div>
+        <pre>{{this.currentFilter | json}}</pre>
+        <div *ngFor="let item of cat.items | filterFn:filterItems(this.currentFilter.type, this.currentFilter.value) | naturalSort:'data.' + sortField" >
+          <div [outerHTML]="item.html"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  -->
