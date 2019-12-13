@@ -90,7 +90,7 @@ export class WebflowCollectionSearchComponent implements OnInit, AfterViewInit {
       dataString = dataString.replace(/"[^"]*(?:""[^"]*)*"/g, m => m.replace(/\n\s*/g, '\n').replace(/\n/g, '\\n'));
       const item: CollectionsItem = {
         data: JSON.parse(dataString),
-        html: this.domSanitizer.bypassSecurityTrustHtml(element.outerHTML)
+        html: element.outerHTML // this.domSanitizer.bypassSecurityTrustHtml(element.outerHTML)
       };
       try {
         item.data[this.tagField] = item.data[this.tagField].split('\n');

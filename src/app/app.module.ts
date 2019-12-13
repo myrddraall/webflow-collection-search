@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { NaturalSortPipe } from './pipes/natural-sort.pipe';
 import { FilterFnPipe } from './pipes/filter.pipe';
+import { InsertHtmlDirective } from './webflow-collection-search/insert-html.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FilterFnPipe } from './pipes/filter.pipe';
     CategorizePipe,
     CategorizeByAlphaPipe,
     NaturalSortPipe,
-    FilterFnPipe
+    FilterFnPipe,
+    InsertHtmlDirective
   ],
   imports: [
     BrowserModule,

@@ -43,11 +43,12 @@
         <div class="w-dyn-item category-header" *ngIf="showGroupHeaders">
           {{cat.label}}
         </div>
-        <div class="w-dyn-item"
-          *ngFor="let item of cat.items | filterFn:filterItems(this.currentFilter.type, this.currentFilter.value) | naturalSort:'data.' + sortField"
-          [innerHtml]="item.html">
+        <ng-container
+          *ngFor="let item of cat.items | filterFn:filterItems(this.currentFilter.type, this.currentFilter.value) | naturalSort:'data.' + sortField">
+          <ng-template appInsertHtml [html]="item.html"></ng-template>
+        </ng-container>
 
-        </div>
+
       </ng-container>
     </ng-container>
   </ng-container>
